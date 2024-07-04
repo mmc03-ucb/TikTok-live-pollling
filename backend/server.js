@@ -14,6 +14,15 @@ app.use(bodyParser.json());
 // MongoDB connection
 mongoose.connect('mongodb+srv://muqueet03:bjn2eJU955ZGRCzT@tiktok-live-quiz.8z8okt3.mongodb.net/?retryWrites=true&w=majority&appName=tiktok-live-quiz', { useNewUrlParser: true, useUnifiedTopology: true });
 
+// Game Schema for Memory Match
+const GameSchema = new mongoose.Schema({
+  viewerId: String,
+  completed: Boolean,
+  reward: String,
+});
+
+const Game = mongoose.model('Game', GameSchema);
+
 // Function to handle poll ending based on timer
 const handlePollTimer = (poll) => {
   if (poll.timer && poll.timer > 0) {
@@ -29,8 +38,7 @@ const handlePollTimer = (poll) => {
   }
 };
 
-
-// API Endpoints
+// API Endpoints for Poll
 app.post('/createPoll', async (req, res) => {
   const { question, options, correctAnswer, timer } = req.body;
   const poll = new Poll({ question, options, correctAnswer, votes: Array(options.length).fill(0), isActive: true, timer });
@@ -67,6 +75,7 @@ app.post('/endPoll/:id', async (req, res) => {
   io.emit('pollResults', results);
   res.send(poll);
 });
+
 app.get('/pollResults/:id', async (req, res) => {
   const poll = await Poll.findById(req.params.id);
   if (!poll) return res.status(404).send('Poll not found');
@@ -78,6 +87,26 @@ app.get('/results', async (req, res) => {
   const poll = await Poll.findOne({ isActive: false }).sort({ _id: -1 });
   res.send(poll);
 });
+
+// API Endpoints for Memory Match Game
+app.post('/startGame', (req, res) => {
+  io.emit('startGame');
+  res.status(200).send('Game started');
+});
+
+app.post('/completeGame', async (req, res) => {
+  const { viewerId } = req.body;
+  const reward = 'Congratulations! You won a reward!';
+  await Game.create({ viewerId, completed: true, reward });
+  io.emit('gameCompleted', viewerId);
+  res.status(200).send(reward);
+});
+
+app.get('/gameResults', async (req, res) => {
+  const results = await Game.find({ completed: true });
+  res.status(200).send(results);
+});
+
 
 // Start server
 server.listen(3000, () => {

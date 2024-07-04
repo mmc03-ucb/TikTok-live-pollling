@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, FlatList } from 'react-native';
 import axios from 'axios';
 
 const Streamer = ({ navigation }) => {
@@ -113,6 +113,20 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  resultsContainer: {
+    marginTop: 20,
+  },
+  resultsTitle: {
+    fontSize: 18,
+    color: '#fff',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  result: {
+    fontSize: 16,
+    color: '#fff',
+    marginBottom: 5,
   },
 });
 

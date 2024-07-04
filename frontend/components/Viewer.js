@@ -3,27 +3,43 @@ import { View, Text, TouchableOpacity, FlatList, StyleSheet, ImageBackground } f
 import axios from 'axios';
 import io from 'socket.io-client';
 
+
 const Viewer = ({ navigation }) => {
   const [poll, setPoll] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
   const [results, setResults] = useState([]);
   const [timeRemaining, setTimeRemaining] = useState(null);
+  const [showMemoryMatch, setShowMemoryMatch] = useState(false);
+  const [viewerId, setViewerId] = useState(() => `viewer-${Math.random().toString(36).substr(2, 9)}`);
 
   useEffect(() => {
     const socket = io('http://localhost:3000');
+
     socket.on('pollCreated', poll => {
       setPoll(poll);
       setSelectedOption(null);
       setResults([]);
     });
+
     socket.on('voteSubmitted', poll => {
       setPoll(poll);
     });
+
     socket.on('pollClosed', poll => {
       setPoll(poll);
     });
+
     socket.on('pollResults', results => {
       setResults(results);
+    });
+
+    socket.on('startGame', () => {
+      setShowMemoryMatch(true);
+      navigation.navigate('MemoryMatch', { viewerId });
+    });
+
+    socket.on('gameCompleted', (viewerId) => {
+      console.log(`${viewerId} completed the game and received a reward!`);
     });
 
     const fetchCurrentPoll = async () => {
@@ -39,6 +55,8 @@ const Viewer = ({ navigation }) => {
       socket.off('voteSubmitted');
       socket.off('pollClosed');
       socket.off('pollResults');
+      socket.off('startGame');
+      socket.off('gameCompleted');
     };
   }, []);
 
@@ -46,6 +64,10 @@ const Viewer = ({ navigation }) => {
     await axios.post('http://localhost:3000/submitVote', { pollId: poll._id, optionIndex });
     setSelectedOption(optionIndex);
   };
+
+  if (showMemoryMatch) {
+    return null; // Navigation to MemoryMatch will be handled by React Navigation
+  }
 
   if (!poll) {
     return (
@@ -61,7 +83,7 @@ const Viewer = ({ navigation }) => {
     <ImageBackground source={require('../assets/background.jpg')} style={styles.backgroundImage}>
       <View style={styles.container}>
         <View style={styles.content}>
-          {results.length == 0 && (
+          {results.length === 0 && (
             <>
               <Text style={styles.question}>{poll.question}</Text>
               <FlatList

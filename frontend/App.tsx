@@ -6,6 +6,9 @@ import Streamer from './components/Streamer';
 import Viewer from './components/Viewer';
 import ActivePoll from './components/ActivePoll';
 import StreamerOptions from './components/StreamerOptions';
+import MiniGames from './components/MiniGames';
+import MemoryMatch from './components/MemoryMatch';
+import ActiveGame from './components/ActiveGame';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +21,9 @@ const App = () => {
         <Stack.Screen name="Streamer" component={Streamer} options={{ headerShown: false }} />
         <Stack.Screen name="ActivePoll" component={ActivePoll} options={{ headerShown: false }} />
         <Stack.Screen name="Viewer" component={Viewer} options={{ headerShown: false }} />
+        <Stack.Screen name="MiniGames" component={MiniGames} options={{ headerShown: false }} />
+        <Stack.Screen name="MemoryMatch" component={MemoryMatch} options={{ headerShown: false }} />
+        <Stack.Screen name="ActiveGame" component={ActiveGame} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -13,7 +13,10 @@ const StreamerOptions = ({ navigation }) => {
               <Text style={styles.optionButtonText}>Poll</Text>
             </TouchableOpacity>
             {/* Add more options here */}
-            <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('Streamer')}>
+            <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('MiniGames')}>
+              <Text style={styles.optionButtonText}>Mini-Games</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton}>
               <Text style={styles.optionButtonText}>Auction</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.smallButton} onPress={() => setShowOptions(false)}>
