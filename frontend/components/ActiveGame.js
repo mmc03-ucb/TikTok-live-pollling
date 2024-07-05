@@ -46,7 +46,7 @@ const ActiveGame = ({ navigation }) => {
                 data={results}
                 keyExtractor={(item) => item.viewerId}
                 renderItem={({ item }) => (
-                  <Text style={styles.result}>{`Viewer ${item.viewerId} got a reward: ${item.reward}`}</Text>
+                  <Text style={styles.result}>{`Viewer ${item.viewerId} completed the game`}</Text>
                 )}
               />
             </View>

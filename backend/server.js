@@ -95,12 +95,13 @@ app.post('/startGame', (req, res) => {
 });
 
 app.post('/completeGame', async (req, res) => {
-  const { viewerId } = req.body;
-  const reward = 'Congratulations! You won a reward!';
+  const { viewerId, isVictory } = req.body;
+  const reward = isVictory ? 'Congratulations! You won a reward!' : 'Try again next time!';
   await Game.create({ viewerId, completed: true, reward });
   io.emit('gameCompleted', viewerId);
-  res.status(200).send(reward);
+  res.status(200).send({ reward });
 });
+
 
 app.get('/gameResults', async (req, res) => {
   const results = await Game.find({ completed: true });

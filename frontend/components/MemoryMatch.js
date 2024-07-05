@@ -30,6 +30,8 @@ const MemoryMatch = ({ route, navigation }) => {
   const [timer, setTimer] = useState(60); // 60 seconds for the game
   const [score, setScore] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
+  const [reward, setReward] = useState('');
+  const [gameEnded, setGameEnded] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -74,39 +76,50 @@ const MemoryMatch = ({ route, navigation }) => {
   };
 
   const handleGameEnd = async (isVictory) => {
-    await axios.post('http://localhost:3000/completeGame', { viewerId, isVictory });
+    const response = await axios.post('http://localhost:3000/completeGame', { viewerId, isVictory });
+    setReward(response.data.reward);
+    setGameEnded(true);
   };
 
   return (
     <ImageBackground source={require('../assets/background.jpg')} style={styles.backgroundImage}>
       <View style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.title}>Memory Match</Text>
-          <Text style={styles.timer}>Time Remaining: {timer} seconds</Text>
-          <Text style={styles.score}>Score: {score}</Text>
-          <FlatList
-            data={cards}
-            numColumns={4}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={[
-                  styles.card,
-                  flippedCards.includes(item) || matchedCards.includes(item.id) ? styles.cardFlipped : styles.cardUnflipped,
-                ]}
-                onPress={() => handleCardFlip(item)}
-                disabled={flippedCards.includes(item) || matchedCards.includes(item.id)}
-              >
-                <Text style={styles.cardText}>
-                  {flippedCards.includes(item) || matchedCards.includes(item.id) ? item.value : '?'}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Home')}>
-            <Text style={styles.backButtonText}>Back</Text>
-          </TouchableOpacity>
-        </View>
+        {!gameEnded ? (
+          <View style={styles.content}>
+            <Text style={styles.title}>Memory Match</Text>
+            <Text style={styles.timer}>Time Remaining: {timer} seconds</Text>
+            <Text style={styles.score}>Score: {score}</Text>
+            <FlatList
+              data={cards}
+              numColumns={4}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[
+                    styles.card,
+                    flippedCards.includes(item) || matchedCards.includes(item.id) ? styles.cardFlipped : styles.cardUnflipped,
+                  ]}
+                  onPress={() => handleCardFlip(item)}
+                  disabled={flippedCards.includes(item) || matchedCards.includes(item.id)}
+                >
+                  <Text style={styles.cardText}>
+                    {flippedCards.includes(item) || matchedCards.includes(item.id) ? item.value : '?'}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            />
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Home')}>
+              <Text style={styles.backButtonText}>Back</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.content}>
+            <Text style={styles.rewardText}>{reward}</Text>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Home')}>
+              <Text style={styles.backButtonText}>Back to Home</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </ImageBackground>
   );
@@ -174,6 +187,12 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  rewardText: {
+    fontSize: 24,
+    color: '#fff',
+    textAlign: 'center',
+    marginVertical: 20,
   },
 });
 
