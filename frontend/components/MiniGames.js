@@ -1,11 +1,18 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, TextInput } from 'react-native';
 import axios from 'axios';
 
 const MiniGames = ({ navigation }) => {
+  const [selectedGame, setSelectedGame] = useState(null);
+  const [word, setWord] = useState('');
 
   const startMemoryMatch = async () => {
     await axios.post('http://localhost:3000/startGame');
+    navigation.navigate('ActiveGame');
+  };
+
+  const startWordScramble = async () => {
+    await axios.post('http://localhost:3000/startWordScramble', { word });
     navigation.navigate('ActiveGame');
   };
 
@@ -17,9 +24,22 @@ const MiniGames = ({ navigation }) => {
           <TouchableOpacity style={styles.button} onPress={startMemoryMatch}>
             <Text style={styles.buttonText}>Memory Match</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('WordScramble')}>
+          <TouchableOpacity style={styles.button} onPress={() => setSelectedGame('WordScramble')}>
             <Text style={styles.buttonText}>Word Scramble</Text>
           </TouchableOpacity>
+          {selectedGame === 'WordScramble' && (
+            <>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter a word for Word Scramble"
+                value={word}
+                onChangeText={setWord}
+              />
+              <TouchableOpacity style={styles.button} onPress={startWordScramble}>
+                <Text style={styles.buttonText}>Start Game</Text>
+              </TouchableOpacity>
+            </>
+          )}
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
@@ -51,6 +71,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginBottom: 20,
     textAlign: 'center',
+  },
+  input: {
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+    width: '100%',
   },
   button: {
     backgroundColor: '#007bff',

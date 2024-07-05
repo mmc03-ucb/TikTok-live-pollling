@@ -23,6 +23,12 @@ const GameSchema = new mongoose.Schema({
 
 const Game = mongoose.model('Game', GameSchema);
 
+// Function to scramble a word
+const scrambleWord = (word) => {
+  const scrambled = word.split('').sort(() => Math.random() - 0.5).join('');
+  return scrambled !== word ? scrambled : scrambleWord(word); // Ensure the scrambled word is different from the original
+};
+
 // Function to handle poll ending based on timer
 const handlePollTimer = (poll) => {
   if (poll.timer && poll.timer > 0) {
@@ -108,6 +114,21 @@ app.get('/gameResults', async (req, res) => {
   res.status(200).send(results);
 });
 
+// API Endpoints for Word Scramble Game
+app.post('/startWordScramble', (req, res) => {
+  const { word } = req.body;
+  io.emit('startWordScramble', { word: word });
+  res.status(200).send('Word Scramble started');
+});
+
+
+app.post('/completeWordScramble', async (req, res) => {
+  const { viewerId, isVictory } = req.body;
+  const reward = isVictory ? 'Congratulations! You unscrambled the word!' : 'Try again next time!';
+  await Game.create({ viewerId, completed: true, reward });
+  io.emit('wordScrambleCompleted', viewerId);
+  res.status(200).send({ reward });
+});
 
 // Start server
 server.listen(3000, () => {

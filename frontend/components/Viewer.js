@@ -3,13 +3,14 @@ import { View, Text, TouchableOpacity, FlatList, StyleSheet, ImageBackground } f
 import axios from 'axios';
 import io from 'socket.io-client';
 
-
 const Viewer = ({ navigation }) => {
   const [poll, setPoll] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
   const [results, setResults] = useState([]);
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [showMemoryMatch, setShowMemoryMatch] = useState(false);
+  const [showWordScramble, setShowWordScramble] = useState(false); // Add state for WordScramble
+  const [scrambledWord, setScrambledWord] = useState(''); // Add state for scrambled word
   const [viewerId, setViewerId] = useState(() => `viewer-${Math.random().toString(36).substr(2, 9)}`);
 
   useEffect(() => {
@@ -38,6 +39,12 @@ const Viewer = ({ navigation }) => {
       navigation.navigate('MemoryMatch', { viewerId });
     });
 
+    socket.on('startWordScramble', ({ word }) => {
+      setScrambledWord(word);
+      setShowWordScramble(true);
+      navigation.navigate('WordScramble', { viewerId, word });
+    });
+
     socket.on('gameCompleted', (viewerId) => {
       console.log(`${viewerId} completed the game and received a reward!`);
     });
@@ -56,6 +63,7 @@ const Viewer = ({ navigation }) => {
       socket.off('pollClosed');
       socket.off('pollResults');
       socket.off('startGame');
+      socket.off('startWordScramble');
       socket.off('gameCompleted');
     };
   }, []);
@@ -65,8 +73,8 @@ const Viewer = ({ navigation }) => {
     setSelectedOption(optionIndex);
   };
 
-  if (showMemoryMatch) {
-    return null; // Navigation to MemoryMatch will be handled by React Navigation
+  if (showMemoryMatch || showWordScramble) {
+    return null; // Navigation to the games will be handled by React Navigation
   }
 
   if (!poll) {
