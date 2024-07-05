@@ -17,11 +17,8 @@ const MiniGames = ({ navigation }) => {
           <TouchableOpacity style={styles.button} onPress={startMemoryMatch}>
             <Text style={styles.buttonText}>Memory Match</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => alert('Mini-Game 2 Selected')}>
-            <Text style={styles.buttonText}>Mini-Game 2</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => alert('Mini-Game 3 Selected')}>
-            <Text style={styles.buttonText}>Mini-Game 3</Text>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('WordScramble')}>
+            <Text style={styles.buttonText}>Word Scramble</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Text style={styles.backButtonText}>Back</Text>
