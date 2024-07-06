@@ -3,15 +3,13 @@ import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, TextInput, I
 import axios from 'axios';
 
 const GuessThePicture = ({ route, navigation }) => {
-  const { viewerId } = route.params;
+  const { viewerId, imageUrl, correctAnswer } = route.params;
   const [input, setInput] = useState('');
   const [timer, setTimer] = useState(60); // 60 seconds for the game
   const [reward, setReward] = useState('');
   const [gameEnded, setGameEnded] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
   const [revealedPortion, setRevealedPortion] = useState(0); // Percentage of image revealed
-  const imageUri = 'https://wallpapers.com/images/featured/star-wars-plzcoaffexgf4h81.jpg'; // Replace with your image URL
-  const correctAnswer = 'example'; // Replace with your correct answer
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -62,7 +60,7 @@ const GuessThePicture = ({ route, navigation }) => {
             <Text style={styles.title}>Guess the Picture</Text>
             <View style={styles.imageContainer}>
               <Image
-                source={{ uri: imageUri }}
+                source={{ uri: imageUrl }}
                 style={{
                   ...styles.image,
                   height: `${revealedPortion}%`

@@ -5,6 +5,8 @@ import axios from 'axios';
 const MiniGames = ({ navigation }) => {
   const [selectedGame, setSelectedGame] = useState(null);
   const [word, setWord] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [correctAnswer, setCorrectAnswer] = useState('');
 
   const startMemoryMatch = async () => {
     await axios.post('http://localhost:3000/startGame');
@@ -17,7 +19,7 @@ const MiniGames = ({ navigation }) => {
   };
 
   const startGuessThePicture = async () => {
-    await axios.post('http://localhost:3000/startGuessThePicture');
+    await axios.post('http://localhost:3000/startGuessThePicture', { imageUrl, correctAnswer });
     navigation.navigate('ActiveGame');
   };
 
@@ -45,9 +47,28 @@ const MiniGames = ({ navigation }) => {
               </TouchableOpacity>
             </>
           )}
-          <TouchableOpacity style={styles.button} onPress={startGuessThePicture}>
+          <TouchableOpacity style={styles.button} onPress={() => setSelectedGame('GuessThePicture')}>
             <Text style={styles.buttonText}>Guess the Picture</Text>
           </TouchableOpacity>
+          {selectedGame === 'GuessThePicture' && (
+            <>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter image URL"
+                value={imageUrl}
+                onChangeText={setImageUrl}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Enter correct answer"
+                value={correctAnswer}
+                onChangeText={setCorrectAnswer}
+              />
+              <TouchableOpacity style={styles.button} onPress={startGuessThePicture}>
+                <Text style={styles.buttonText}>Start Game</Text>
+              </TouchableOpacity>
+            </>
+          )}
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>

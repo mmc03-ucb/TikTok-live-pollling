@@ -132,9 +132,11 @@ app.post('/completeWordScramble', async (req, res) => {
 
 // API Endpoints for Guess the Picture Game
 app.post('/startGuessThePicture', (req, res) => {
-  io.emit('startGuessThePicture');
+  const { imageUrl, correctAnswer } = req.body;
+  io.emit('startGuessThePicture', { imageUrl, correctAnswer });
   res.status(200).send('Guess the Picture started');
 });
+
 
 app.post('/completeGuessThePicture', async (req, res) => {
   const { viewerId, isVictory } = req.body;

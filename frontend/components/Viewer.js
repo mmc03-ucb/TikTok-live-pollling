@@ -12,6 +12,8 @@ const Viewer = ({ navigation }) => {
   const [showWordScramble, setShowWordScramble] = useState(false); // Add state for WordScramble
   const [showGuessThePicture, setShowGuessThePicture] = useState(false);
   const [scrambledWord, setScrambledWord] = useState(''); // Add state for scrambled word
+  const [imageUrl, setImageUrl] = useState(''); // Add state for image URL
+  const [correctAnswer, setCorrectAnswer] = useState(''); // Add state for correct answer
   const [viewerId, setViewerId] = useState(() => `viewer-${Math.random().toString(36).substr(2, 9)}`);
 
   useEffect(() => {
@@ -46,9 +48,11 @@ const Viewer = ({ navigation }) => {
       navigation.navigate('WordScramble', { viewerId, word });
     });
 
-    socket.on('startGuessThePicture', () => {
+    socket.on('startGuessThePicture', ({ imageUrl, correctAnswer }) => {
+      setImageUrl(imageUrl);
+      setCorrectAnswer(correctAnswer);
       setShowGuessThePicture(true);
-      navigation.navigate('GuessThePicture', { viewerId });
+      navigation.navigate('GuessThePicture', { viewerId, imageUrl, correctAnswer });
     });
 
     socket.on('gameCompleted', (viewerId) => {
