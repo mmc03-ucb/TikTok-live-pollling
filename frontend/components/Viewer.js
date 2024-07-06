@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, ImageBackground, TextInput } from 'react-native';
 import axios from 'axios';
 import io from 'socket.io-client';
 
@@ -9,12 +9,15 @@ const Viewer = ({ navigation }) => {
   const [results, setResults] = useState([]);
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [showMemoryMatch, setShowMemoryMatch] = useState(false);
-  const [showWordScramble, setShowWordScramble] = useState(false); // Add state for WordScramble
+  const [showWordScramble, setShowWordScramble] = useState(false);
   const [showGuessThePicture, setShowGuessThePicture] = useState(false);
-  const [scrambledWord, setScrambledWord] = useState(''); // Add state for scrambled word
-  const [imageUrl, setImageUrl] = useState(''); // Add state for image URL
-  const [correctAnswer, setCorrectAnswer] = useState(''); // Add state for correct answer
+  const [scrambledWord, setScrambledWord] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [correctAnswer, setCorrectAnswer] = useState('');
   const [viewerId, setViewerId] = useState(() => `viewer-${Math.random().toString(36).substr(2, 9)}`);
+  const [bet, setBet] = useState(null);
+  const [betAmount, setBetAmount] = useState('');
+  const [selectedBetOption, setSelectedBetOption] = useState(null);
 
   useEffect(() => {
     const socket = io('http://localhost:3000');
@@ -55,6 +58,10 @@ const Viewer = ({ navigation }) => {
       navigation.navigate('GuessThePicture', { viewerId, imageUrl, correctAnswer });
     });
 
+    socket.on('startBet', bet => {
+      setBet(bet);
+    });
+
     socket.on('gameCompleted', (viewerId) => {
       console.log(`${viewerId} completed the game and received a reward!`);
     });
@@ -65,7 +72,14 @@ const Viewer = ({ navigation }) => {
       setTimeRemaining(response.data.timer);
     };
 
+    const fetchCurrentBet = async () => {
+      const response = await axios.get('http://localhost:3000/currentBet');
+      setBet(response.data);
+    };
+
     fetchCurrentPoll();
+    fetchCurrentBet();
+
 
     return () => {
       socket.off('pollCreated');
@@ -75,6 +89,7 @@ const Viewer = ({ navigation }) => {
       socket.off('startGame');
       socket.off('startWordScramble');
       socket.off('startGuessThePicture');
+      socket.off('startBet');
       socket.off('gameCompleted');
     };
   }, []);
@@ -84,11 +99,22 @@ const Viewer = ({ navigation }) => {
     setSelectedOption(optionIndex);
   };
 
+  const placeBet = async () => {
+    if (selectedBetOption && betAmount) {
+      await axios.post('http://localhost:3000/placeBet', {
+        viewerId,
+        option: selectedBetOption,
+        amount: parseFloat(betAmount),
+      });
+      navigation.navigate('BetResult', { viewerId });
+    }
+  };
+
   if (showMemoryMatch || showWordScramble || showGuessThePicture) {
     return null; // Navigation to the games will be handled by React Navigation
   }
 
-  if (!poll) {
+  if (!poll && !bet) {
     return (
       <ImageBackground source={require('/Users/mmc/Desktop/tiktok-live-quiz/frontend/assets/background.jpg')} style={styles.backgroundImage}>
         <View style={styles.noPollContainer}>
@@ -102,7 +128,33 @@ const Viewer = ({ navigation }) => {
     <ImageBackground source={require('/Users/mmc/Desktop/tiktok-live-quiz/frontend/assets/background.jpg')} style={styles.backgroundImage}>
       <View style={styles.container}>
         <View style={styles.content}>
-          {results.length === 0 && (
+          {bet ? (
+            <>
+              <Text style={styles.question}>{bet.title}</Text>
+              <FlatList
+                data={bet.options}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={[styles.optionButton, selectedBetOption === item.option && styles.selectedOptionButton]}
+                    onPress={() => setSelectedBetOption(item.option)}
+                  >
+                    <Text style={styles.optionText}>{item.option}</Text>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.option}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Bet Amount"
+                value={betAmount}
+                onChangeText={setBetAmount}
+                keyboardType="numeric"
+              />
+              <TouchableOpacity style={styles.button} onPress={placeBet}>
+                <Text style={styles.buttonText}>Place Bet</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
             <>
               <Text style={styles.question}>{poll.question}</Text>
               <FlatList
@@ -180,6 +232,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 5,
   },
+  selectedOptionButton: {
+    backgroundColor: '#28a745',
+  },
   optionText: {
     color: '#fff',
     fontSize: 16,
@@ -221,6 +276,25 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  input: {
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+    width: '100%',
+  },
+  button: {
+    backgroundColor: '#007bff',
+    padding: 15,
+    borderRadius: 5,
+    marginVertical: 10,
+    width: '100%', // Make buttons full width inside the content box
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
   },
 });
 

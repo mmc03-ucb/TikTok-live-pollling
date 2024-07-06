@@ -12,6 +12,10 @@ import ActiveGame from './components/Games/ActiveGame';
 import WordScramble from './components/Games/WordScramble'; // Import the new component
 import GuessThePicture from './components/Games/GuessThePicture';
 import AnalyticsDashboard from './components/Streamer/AnalyticsDashboard';
+import Betting from './components/Streamer/Betting.js';
+import LiveBetMonitor from './components/Streamer/LiveBetMonitor.js';
+import PlaceBet from './components/PlaceBet.js';
+import BetResult from './components/BetResult.js';
 
 const Stack = createStackNavigator();
 
@@ -29,7 +33,10 @@ const App = () => {
         <Stack.Screen name="ActiveGame" component={ActiveGame} options={{ headerShown: false }} />
         <Stack.Screen name="WordScramble" component={WordScramble} options={{ headerShown: false }} />
         <Stack.Screen name="GuessThePicture" component={GuessThePicture} options={{ headerShown: false }} />
-        <Stack.Screen name="AnalyticsDashboard" component={AnalyticsDashboard} options={{ headerShown: false }} />
+        <Stack.Screen name="Betting" component={Betting} options={{ headerShown: false }} />
+        <Stack.Screen name="LiveBetMonitor" component={LiveBetMonitor} options={{ headerShown: false }} />
+        <Stack.Screen name="PlaceBet" component={PlaceBet} options={{ headerShown: false }} />
+        <Stack.Screen name="BetResult" component={BetResult} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -4,6 +4,7 @@ const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const Poll = require('/Users/mmc/Desktop/tiktok-live-quiz/backend/models/poll.js');
+const { Bet, CurrentBet } = require('./models/bet');
 
 const app = express();
 const server = http.createServer(app);
@@ -144,6 +145,46 @@ app.post('/completeGuessThePicture', async (req, res) => {
   await Game.create({ viewerId, completed: true, reward });
   io.emit('guessThePictureCompleted', viewerId);
   res.status(200).send({ reward });
+});
+
+app.post('/startBet', async (req, res) => {
+  const { title, options, timer } = req.body;
+  const betOptions = options.map(option => ({ option, bets: 0 }));
+  const newBet = new CurrentBet({ title, options: betOptions, timer, active: true });
+  await newBet.save();
+  io.emit('startBet', newBet);
+  res.status(201).send(newBet);
+});
+
+app.get('/currentBet', async (req, res) => {
+  const currentBet = await CurrentBet.findOne({ active: true });
+  res.send(currentBet);
+});
+
+app.post('/placeBet', async (req, res) => {
+  const { viewerId, option, amount } = req.body;
+  const bet = new Bet({ viewerId, option, amount });
+  await bet.save();
+  await CurrentBet.updateOne({ 'options.option': option }, { $inc: { 'options.$.bets': amount } });
+  res.status(201).send(bet);
+});
+
+app.post('/endBet', async (req, res) => {
+  const currentBet = await CurrentBet.findOne({ active: true });
+  currentBet.active = false;
+  await currentBet.save();
+  const bets = await Bet.find();
+  // Handle bet results (you need to implement the logic for rewarding and deducting)
+  io.emit('endBet', currentBet);
+  res.status(200).send(currentBet);
+});
+
+app.get('/betResult/:viewerId', async (req, res) => {
+  const { viewerId } = req.params;
+  const bet = await Bet.findOne({ viewerId });
+  // Implement logic to determine if the bet was a win or loss
+  const result = { message: 'Bet result message' }; // Update with actual result message
+  res.send(result);
 });
 
 

@@ -15,8 +15,8 @@ const StreamerOptions = ({ navigation }) => {
             <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('MiniGames')}>
               <Text style={styles.optionButtonText}>Mini-Games</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton}>
-              <Text style={styles.optionButtonText}>Auction</Text>
+            <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('Betting')}>
+              <Text style={styles.optionButtonText}>Betting</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('AnalyticsDashboard')}>
               <Text style={styles.optionButtonText}>Analytics Dashboard</Text>
