@@ -16,6 +16,11 @@ const MiniGames = ({ navigation }) => {
     navigation.navigate('ActiveGame');
   };
 
+  const startGuessThePicture = async () => {
+    await axios.post('http://localhost:3000/startGuessThePicture');
+    navigation.navigate('ActiveGame');
+  };
+
   return (
     <ImageBackground source={require('../assets/background.jpg')} style={styles.backgroundImage}>
       <View style={styles.container}>
@@ -40,6 +45,9 @@ const MiniGames = ({ navigation }) => {
               </TouchableOpacity>
             </>
           )}
+          <TouchableOpacity style={styles.button} onPress={startGuessThePicture}>
+            <Text style={styles.buttonText}>Guess the Picture</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
