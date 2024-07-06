@@ -66,6 +66,9 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 5,
     marginVertical: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#007bff',
   },
   optionButtonText: {
     color: '#fff',

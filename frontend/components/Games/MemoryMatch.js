@@ -134,10 +134,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end', // Aligns children to the bottom
     padding: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)', // semi-transparent background
+    backgroundColor: 'transparent', // semi-transparent background
   },
   content: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)', // darker semi-transparent background
+    backgroundColor: 'transparent', // darker semi-transparent background
     borderRadius: 10,
     padding: 20,
     alignItems: 'center', // Center align the items inside
@@ -177,12 +177,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   backButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: 'transparent',
     padding: 10,
     borderRadius: 5,
     marginVertical: 10,
     width: '100%', // Make back button full width inside the content box
     alignItems: 'center',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#007bff',
   },
   backButtonText: {
     color: '#fff',

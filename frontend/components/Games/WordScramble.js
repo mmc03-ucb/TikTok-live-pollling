@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, TextInput, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, TextInput } from 'react-native';
 import axios from 'axios';
 
-const GuessThePicture = ({ route, navigation }) => {
-  const { viewerId, imageUrl, correctAnswer } = route.params;
+const scrambleWord = (word) => {
+  const scrambled = word.split('').sort(() => Math.random() - 0.5).join('');
+  return scrambled !== word ? scrambled : scrambleWord(word); // Ensure the scrambled word is different from the original
+};
+
+const WordScramble = ({ route, navigation }) => {
+  const { viewerId, word } = route.params;
+  const [scrambledWord, setScrambledWord] = useState(scrambleWord(word));
   const [input, setInput] = useState('');
   const [timer, setTimer] = useState(60); // 60 seconds for the game
   const [reward, setReward] = useState('');
   const [gameEnded, setGameEnded] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
-  const [revealedPortion, setRevealedPortion] = useState(0); // Percentage of image revealed
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -21,23 +26,15 @@ const GuessThePicture = ({ route, navigation }) => {
         }
         return prev - 1;
       });
-
-      setRevealedPortion((prev) => Math.min(prev + 5, 100)); // Reveal more of the image
     }, 1000);
     setIntervalId(id);
 
     return () => clearInterval(id);
   }, []);
 
-  useEffect(() => {
-    if (input.toLowerCase() === correctAnswer.toLowerCase()) {
-      clearInterval(intervalId);
-      handleGameEnd(true);
-    }
-  }, [input, correctAnswer, intervalId]);
 
   const handleSubmit = () => {
-    if (input.toLowerCase() === correctAnswer.toLowerCase()) {
+    if (input.toLowerCase().trim() === word.toLowerCase().trim()) {
       clearInterval(intervalId);
       handleGameEnd(true);
     } else {
@@ -46,8 +43,7 @@ const GuessThePicture = ({ route, navigation }) => {
   };
 
   const handleGameEnd = async (isVictory) => {
-    console.log(`Game Ended. Victory: ${isVictory}, Answer: ${correctAnswer}, Input: ${input}`);
-    const response = await axios.post('http://localhost:3000/completeGuessThePicture', { viewerId, isVictory });
+    const response = await axios.post('http://localhost:3000/completeWordScramble', { viewerId, isVictory });
     setReward(response.data.reward);
     setGameEnded(true);
   };
@@ -57,21 +53,13 @@ const GuessThePicture = ({ route, navigation }) => {
       <View style={styles.container}>
         {!gameEnded ? (
           <View style={styles.content}>
-            <Text style={styles.title}>Guess the Picture</Text>
-            <View style={styles.imageContainer}>
-              <Image
-                source={{ uri: imageUrl }}
-                style={{
-                  ...styles.image,
-                  height: `${revealedPortion}%`
-                }}
-              />
-            </View>
+            <Text style={styles.title}>Word Scramble</Text>
+            <Text style={styles.scrambledWord}>{scrambledWord}</Text>
             <TextInput
               style={styles.input}
               value={input}
               onChangeText={setInput}
-              placeholder="Guess the picture"
+              placeholder="Unscramble the word"
             />
             <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
               <Text style={styles.submitButtonText}>Submit</Text>
@@ -84,6 +72,7 @@ const GuessThePicture = ({ route, navigation }) => {
         ) : (
           <View style={styles.content}>
             <Text style={styles.rewardText}>{reward}</Text>
+            <Text style={styles.correctWord}>The correct word was: {word}</Text>
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Home')}>
               <Text style={styles.backButtonText}>Back to Home</Text>
             </TouchableOpacity>
@@ -103,10 +92,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end', // Aligns children to the bottom
     padding: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)', // semi-transparent background
+    backgroundColor: 'transparent', // semi-transparent background
   },
   content: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)', // darker semi-transparent background
+    backgroundColor: 'transparent', // darker semi-transparent background
     borderRadius: 10,
     padding: 20,
     alignItems: 'center', // Center align the items inside
@@ -117,16 +106,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-  imageContainer: {
-    width: '100%',
-    height: 300,
-    backgroundColor: '#000',
+  scrambledWord: {
+    fontSize: 24,
+    color: '#fff',
     marginBottom: 20,
-    overflow: 'hidden',
-  },
-  image: {
-    width: '100%',
-    resizeMode: 'cover',
+    textAlign: 'center',
   },
   input: {
     backgroundColor: '#fff',
@@ -136,12 +120,15 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   submitButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: 'transparent',
     padding: 15,
     borderRadius: 5,
     marginVertical: 10,
     width: '100%', // Make buttons full width inside the content box
     alignItems: 'center',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#007bff',
   },
   submitButtonText: {
     color: '#fff',
@@ -153,12 +140,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   backButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: 'transparent',
     padding: 10,
     borderRadius: 5,
     marginVertical: 10,
     width: '100%', // Make back button full width inside the content box
     alignItems: 'center',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#007bff',
   },
   backButtonText: {
     color: '#fff',
@@ -170,6 +160,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 20,
   },
+  correctWord: {
+    fontSize: 20,
+    color: '#fff',
+    textAlign: 'center',
+    marginVertical: 10,
+  },
 });
 
-export default GuessThePicture;
+export default WordScramble;

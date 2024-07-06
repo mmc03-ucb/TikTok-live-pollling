@@ -82,10 +82,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end', // Aligns children to the bottom
     padding: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)', // semi-transparent background
+    backgroundColor: 'transparent', // semi-transparent background
   },
   content: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)', // darker semi-transparent background
+    backgroundColor: 'transparent', // darker semi-transparent background
     borderRadius: 10,
     padding: 20,
   },
@@ -97,18 +97,21 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    //borderColor: '#ccc',
     padding: 10,
     marginVertical: 5,
     backgroundColor: '#fff',
     borderRadius: 5,
   },
   button: {
-    backgroundColor: '#007bff',
+    backgroundColor: 'transparent',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
     marginVertical: 5,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#007bff',
   },
   buttonText: {
     color: '#fff',
