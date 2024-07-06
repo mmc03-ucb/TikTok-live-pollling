@@ -130,6 +130,21 @@ app.post('/completeWordScramble', async (req, res) => {
   res.status(200).send({ reward });
 });
 
+// API Endpoints for Guess the Picture Game
+app.post('/startGuessThePicture', (req, res) => {
+  io.emit('startGuessThePicture');
+  res.status(200).send('Guess the Picture started');
+});
+
+app.post('/completeGuessThePicture', async (req, res) => {
+  const { viewerId, isVictory } = req.body;
+  const reward = isVictory ? 'Congratulations! You guessed the picture!' : 'Try again next time!';
+  await Game.create({ viewerId, completed: true, reward });
+  io.emit('guessThePictureCompleted', viewerId);
+  res.status(200).send({ reward });
+});
+
+
 // Start server
 server.listen(3000, () => {
   console.log('Server is running on port 3000');
