@@ -10,6 +10,7 @@ const Viewer = ({ navigation }) => {
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [showMemoryMatch, setShowMemoryMatch] = useState(false);
   const [showWordScramble, setShowWordScramble] = useState(false); // Add state for WordScramble
+  const [showGuessThePicture, setShowGuessThePicture] = useState(false);
   const [scrambledWord, setScrambledWord] = useState(''); // Add state for scrambled word
   const [viewerId, setViewerId] = useState(() => `viewer-${Math.random().toString(36).substr(2, 9)}`);
 
@@ -45,6 +46,11 @@ const Viewer = ({ navigation }) => {
       navigation.navigate('WordScramble', { viewerId, word });
     });
 
+    socket.on('startGuessThePicture', () => {
+      setShowGuessThePicture(true);
+      navigation.navigate('GuessThePicture', { viewerId });
+    });
+
     socket.on('gameCompleted', (viewerId) => {
       console.log(`${viewerId} completed the game and received a reward!`);
     });
@@ -64,6 +70,7 @@ const Viewer = ({ navigation }) => {
       socket.off('pollResults');
       socket.off('startGame');
       socket.off('startWordScramble');
+      socket.off('startGuessThePicture');
       socket.off('gameCompleted');
     };
   }, []);
@@ -73,7 +80,7 @@ const Viewer = ({ navigation }) => {
     setSelectedOption(optionIndex);
   };
 
-  if (showMemoryMatch || showWordScramble) {
+  if (showMemoryMatch || showWordScramble || showGuessThePicture) {
     return null; // Navigation to the games will be handled by React Navigation
   }
 
