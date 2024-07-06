@@ -22,7 +22,7 @@ const Streamer = ({ navigation }) => {
   };
 
   return (
-    <ImageBackground source={require('../assets/background.jpg')} style={styles.backgroundImage}>
+    <ImageBackground source={require('/Users/mmc/Desktop/tiktok-live-quiz/frontend/assets/background.jpg')} style={styles.backgroundImage}>
       <View style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.title}>Create a new Poll</Text>

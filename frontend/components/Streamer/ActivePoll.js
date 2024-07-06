@@ -43,7 +43,7 @@ const ActivePoll = ({ route, navigation }) => {
   if (!poll) return null;
 
   return (
-    <ImageBackground source={require('../assets/background.jpg')} style={styles.backgroundImage}>
+    <ImageBackground source={require('/Users/mmc/Desktop/tiktok-live-quiz/frontend/assets/background.jpg')} style={styles.backgroundImage}>
       <View style={styles.container}>
         <View style={styles.content}>
           {results.length == 0 && (

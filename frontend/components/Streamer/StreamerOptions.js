@@ -5,7 +5,7 @@ const StreamerOptions = ({ navigation }) => {
   const [showOptions, setShowOptions] = useState(false);
 
   return (
-    <ImageBackground source={require('../assets/background.jpg')} style={styles.backgroundImage}>
+    <ImageBackground source={require('/Users/mmc/Desktop/tiktok-live-quiz/frontend/assets/background.jpg')} style={styles.backgroundImage}>
       <View style={styles.container}>
         {showOptions ? (
           <View style={styles.optionsContainer}>

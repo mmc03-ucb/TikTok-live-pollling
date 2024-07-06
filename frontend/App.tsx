@@ -2,16 +2,16 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './components/HomeScreen';
-import Streamer from './components/Streamer';
+import Streamer from './components/Streamer/Streamer.js';
 import Viewer from './components/Viewer';
-import ActivePoll from './components/ActivePoll';
-import StreamerOptions from './components/StreamerOptions';
-import MiniGames from './components/MiniGames';
-import MemoryMatch from './components/MemoryMatch';
-import ActiveGame from './components/ActiveGame';
-import WordScramble from './components/WordScramble'; // Import the new component
-import GuessThePicture from './components/GuessThePicture';
-import AnalyticsDashboard from './components/AnalyticsDashboard';
+import ActivePoll from './components/Streamer/ActivePoll';
+import StreamerOptions from './components/Streamer/StreamerOptions';
+import MiniGames from './components/Games/MiniGames';
+import MemoryMatch from './components/Games/MemoryMatch';
+import ActiveGame from './components/Games/ActiveGame';
+import WordScramble from './components/Games/WordScramble'; // Import the new component
+import GuessThePicture from './components/Games/GuessThePicture';
+import AnalyticsDashboard from './components/Streamer/AnalyticsDashboard';
 
 const Stack = createStackNavigator();
 

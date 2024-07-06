@@ -80,7 +80,7 @@ const performanceData = {
 
 const AnalyticsDashboard = ({ navigation }) => {
   return (
-    <ImageBackground source={require('../assets/background.jpg')} style={styles.backgroundImage}>
+    <ImageBackground source={require('/Users/mmc/Desktop/tiktok-live-quiz/frontend/assets/background.jpg')} style={styles.backgroundImage}>
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <View style={styles.content}>

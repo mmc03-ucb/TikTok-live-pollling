@@ -53,7 +53,7 @@ const GuessThePicture = ({ route, navigation }) => {
   };
 
   return (
-    <ImageBackground source={require('../assets/background.jpg')} style={styles.backgroundImage}>
+    <ImageBackground source={require('/Users/mmc/Desktop/tiktok-live-quiz/frontend/assets/background.jpg')} style={styles.backgroundImage}>
       <View style={styles.container}>
         {!gameEnded ? (
           <View style={styles.content}>

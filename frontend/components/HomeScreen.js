@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react
 
 const HomeScreen = ({ navigation }) => {
   return (
-    <ImageBackground source={require('../assets/background.jpg')} style={styles.backgroundImage}>
+    <ImageBackground source={require('/Users/mmc/Desktop/tiktok-live-quiz/frontend/assets/background.jpg')} style={styles.backgroundImage}>
       <View style={styles.container}>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('StreamerOptions')}>
           <Text style={styles.buttonText}>Streamer</Text>
