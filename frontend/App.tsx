@@ -11,6 +11,7 @@ import MemoryMatch from './components/MemoryMatch';
 import ActiveGame from './components/ActiveGame';
 import WordScramble from './components/WordScramble'; // Import the new component
 import GuessThePicture from './components/GuessThePicture';
+import AnalyticsDashboard from './components/AnalyticsDashboard';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,7 @@ const App = () => {
         <Stack.Screen name="ActiveGame" component={ActiveGame} options={{ headerShown: false }} />
         <Stack.Screen name="WordScramble" component={WordScramble} options={{ headerShown: false }} />
         <Stack.Screen name="GuessThePicture" component={GuessThePicture} options={{ headerShown: false }} />
+        <Stack.Screen name="AnalyticsDashboard" component={AnalyticsDashboard} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

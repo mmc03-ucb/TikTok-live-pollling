@@ -12,12 +12,14 @@ const StreamerOptions = ({ navigation }) => {
             <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('Streamer')}>
               <Text style={styles.optionButtonText}>Poll</Text>
             </TouchableOpacity>
-            {/* Add more options here */}
             <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('MiniGames')}>
               <Text style={styles.optionButtonText}>Mini-Games</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionButton}>
               <Text style={styles.optionButtonText}>Auction</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('AnalyticsDashboard')}>
+              <Text style={styles.optionButtonText}>Analytics Dashboard</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.smallButton} onPress={() => setShowOptions(false)}>
               <Text style={styles.smallButtonText}>Back</Text>
@@ -40,28 +42,27 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'flex-end', // Aligns children to the bottom
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingBottom: 20, // Adjust as needed to position the button
+    paddingBottom: 20,
   },
   smallButton: {
-    backgroundColor: 'transparent', // Transparent background
+    backgroundColor: 'transparent',
     padding: 5,
     borderRadius: 5,
-    borderWidth: 1, // Add a border if needed
-    borderColor: '#007bff', // Color of the border
+    borderWidth: 1,
+    borderColor: '#007bff',
   },
   smallButtonText: {
-    color: '#007bff', // Color of the text to match the border
+    color: 'white',
     fontSize: 16,
   },
   optionsContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     gap: 5,
     alignItems: 'center',
   },
   optionButton: {
-    backgroundColor: '#007bff',
     padding: 5,
     borderRadius: 5,
     marginVertical: 10,
