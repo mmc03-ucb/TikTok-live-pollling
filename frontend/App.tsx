@@ -37,6 +37,7 @@ const App = () => {
         <Stack.Screen name="LiveBetMonitor" component={LiveBetMonitor} options={{ headerShown: false }} />
         <Stack.Screen name="PlaceBet" component={PlaceBet} options={{ headerShown: false }} />
         <Stack.Screen name="BetResult" component={BetResult} options={{ headerShown: false }} />
+        <Stack.Screen name="AnalyticsDashboard" component={AnalyticsDashboard} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
