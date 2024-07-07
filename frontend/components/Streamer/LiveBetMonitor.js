@@ -13,7 +13,7 @@ const LiveBetMonitor = ({ navigation }) => {
 
     fetchBet();
 
-    const interval = setInterval(fetchBet, 5000); // Fetch bet status every 5 seconds
+    const interval = setInterval(fetchBet, 2000); // Fetch bet status every 5 seconds
 
     return () => clearInterval(interval);
   }, []);
