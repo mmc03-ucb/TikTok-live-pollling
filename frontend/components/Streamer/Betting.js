@@ -49,13 +49,6 @@ const Betting = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={handleAddOption}>
           <Text style={styles.buttonText}>Add Option</Text>
         </TouchableOpacity>
-        <TextInput
-          style={styles.input}
-          placeholder="Timer (seconds)"
-          value={String(timer)}
-          onChangeText={(text) => setTimer(Number(text))}
-          keyboardType="numeric"
-        />
         <TouchableOpacity style={styles.button} onPress={startBet}>
           <Text style={styles.buttonText}>Start Bet</Text>
         </TouchableOpacity>

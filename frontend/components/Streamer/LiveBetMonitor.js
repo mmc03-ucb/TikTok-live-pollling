@@ -54,7 +54,7 @@ const LiveBetMonitor = ({ navigation }) => {
           </View>
         ) : (
           <View style={styles.payoutContainer}>
-            <Text style={styles.title}>Winner Payouts:</Text>
+            <Text style={styles.title}>Payouts:</Text>
             <FlatList
               data={payoutResults}
               keyExtractor={(item, index) => index.toString()}
