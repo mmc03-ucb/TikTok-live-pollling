@@ -22,7 +22,7 @@ const GuessThePicture = ({ route, navigation }) => {
         return prev - 1;
       });
 
-      setRevealedPortion((prev) => Math.min(prev + 5, 100)); // Reveal more of the image
+      setRevealedPortion((prev) => Math.min(prev + (100 / 60), 100)); // Reveal more of the image at 100/60 % per second
     }, 1000);
     setIntervalId(id);
 
