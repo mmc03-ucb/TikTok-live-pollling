@@ -139,6 +139,7 @@ const Viewer = ({ navigation }) => {
                     onPress={() => setSelectedBetOption(item.option)}
                   >
                     <Text style={styles.optionText}>{item.option}</Text>
+                    <Text style={styles.optionText}>(Live Odds: {item.odds})</Text>
                   </TouchableOpacity>
                 )}
                 keyExtractor={(item) => item.option}
@@ -189,7 +190,7 @@ const Viewer = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </ImageBackground>
+    </ImageBackground >
   );
 };
 

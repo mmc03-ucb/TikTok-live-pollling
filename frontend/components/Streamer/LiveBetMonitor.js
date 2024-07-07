@@ -35,7 +35,8 @@ const LiveBetMonitor = ({ navigation }) => {
               renderItem={({ item }) => (
                 <View style={styles.optionContainer}>
                   <Text style={styles.optionText}>{item.option}</Text>
-                  <Text style={styles.optionText}>Bets: {item.bets}</Text>
+                  <Text style={styles.optionText}>Total Amount Bet: {item.bets}</Text>
+                  <Text style={styles.optionText}>Odds: {item.odds}</Text>
                 </View>
               )}
             />

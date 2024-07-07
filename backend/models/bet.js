@@ -10,7 +10,13 @@ const Bet = mongoose.model('Bet', betSchema);
 
 const currentBetSchema = new mongoose.Schema({
   title: String,
-  options: [{ option: String, bets: Number }],
+  options: [
+    {
+      option: String,
+      bets: Number,
+      odds: Number, // Add odds field to each option
+    }
+  ],
   timer: Number,
   active: Boolean,
 });

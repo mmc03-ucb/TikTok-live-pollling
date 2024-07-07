@@ -149,12 +149,13 @@ app.post('/completeGuessThePicture', async (req, res) => {
 
 app.post('/startBet', async (req, res) => {
   const { title, options, timer } = req.body;
-  const betOptions = options.map(option => ({ option, bets: 0 }));
+  const betOptions = options.map(option => ({ option, bets: 0, odds: 2.0 })); // Initialize odds to 2.0
   const newBet = new CurrentBet({ title, options: betOptions, timer, active: true });
   await newBet.save();
   io.emit('startBet', newBet);
   res.status(201).send(newBet);
 });
+
 
 app.get('/currentBet', async (req, res) => {
   const currentBet = await CurrentBet.findOne({ active: true });
@@ -163,11 +164,53 @@ app.get('/currentBet', async (req, res) => {
 
 app.post('/placeBet', async (req, res) => {
   const { viewerId, option, amount } = req.body;
+
   const bet = new Bet({ viewerId, option, amount });
   await bet.save();
-  await CurrentBet.updateOne({ 'options.option': option }, { $inc: { 'options.$.bets': amount } });
+
+  const currentBet = await CurrentBet.findOne({ active: true });
+
+  if (!currentBet) {
+    return res.status(404).send('No active bet found');
+  }
+
+  const betOption = currentBet.options.find(opt => opt.option === option);
+
+  if (!betOption) {
+    return res.status(400).send('Invalid betting option');
+  }
+
+  betOption.bets += amount;
+  await currentBet.save();
+
+  // Update odds after placing the bet
+  await updateOdds(currentBet._id);
+
   res.status(201).send(bet);
 });
+
+const updateOdds = async (currentBetId) => {
+  const currentBet = await CurrentBet.findById(currentBetId);
+
+  if (!currentBet) {
+    return;
+  }
+
+  const totalBets = currentBet.options.reduce((sum, option) => sum + option.bets, 0);
+
+  if (totalBets === 0) {
+    currentBet.options.forEach(option => option.odds = 2.0);
+  } else {
+    currentBet.options.forEach(option => {
+      const probability = option.bets / totalBets;
+      option.odds = (1 / probability).toFixed(2);
+    });
+  }
+
+  await currentBet.save();
+  io.emit('updateOdds', currentBet); // Notify clients of the updated odds
+};
+
 
 app.post('/endBet', async (req, res) => {
   const currentBet = await CurrentBet.findOne({ active: true });
