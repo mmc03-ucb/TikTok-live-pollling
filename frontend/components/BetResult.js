@@ -13,6 +13,9 @@ const BetResult = ({ route, navigation }) => {
     };
 
     fetchBetResult();
+    const interval = setInterval(fetchBetResult, 2000); // Fetch bet status every 2 seconds
+
+    return () => clearInterval(interval);
   }, [viewerId]);
 
   return (
@@ -21,7 +24,15 @@ const BetResult = ({ route, navigation }) => {
         {result ? (
           <View style={styles.content}>
             <Text style={styles.title}>Bet Result</Text>
-            <Text style={styles.resultText}>{result.message}</Text>
+            {result.active ? (
+              <Text style={styles.resultText}>{result.message}</Text>
+            ) : (
+              result.betResult.map((bet, index) => (
+                <View key={index}>
+                  <Text style={styles.resultText}>{bet.message}</Text>
+                </View>
+              ))
+            )}
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
               <Text style={styles.buttonText}>Back to Home</Text>
             </TouchableOpacity>

@@ -213,22 +213,113 @@ const updateOdds = async (currentBetId) => {
 
 
 app.post('/endBet', async (req, res) => {
+  const { winningOption } = req.body; // The winning option should be provided in the request
   const currentBet = await CurrentBet.findOne({ active: true });
+
+  if (!currentBet) {
+    return res.status(404).send('No active bet found');
+  }
+
+  // Set the winning property for the winning option
+  currentBet.options.forEach(option => {
+    if (option.option === winningOption) {
+      option.winning = true;
+    } else {
+      option.winning = false;
+    }
+  });
+
   currentBet.active = false;
   await currentBet.save();
+
   const bets = await Bet.find();
-  // Handle bet results (you need to implement the logic for rewarding and deducting)
-  io.emit('endBet', currentBet);
-  res.status(200).send(currentBet);
+  const totalBets = bets.reduce((sum, bet) => sum + bet.amount, 0);
+
+  // Calculate payouts
+  const payoutResults = [];
+  let totalWinningBets = 0;
+
+  // Calculate the total amount bet on the winning option
+  bets.forEach(bet => {
+    if (bet.option === winningOption) {
+      totalWinningBets += bet.amount;
+    }
+  });
+
+  // Calculate and distribute payouts
+  bets.forEach(bet => {
+    if (bet.option === winningOption) {
+      const payoutRatio = totalBets / totalWinningBets;
+      const payoutAmount = bet.amount * payoutRatio;
+      payoutResults.push({
+        viewerId: bet.viewerId,
+        payout: payoutAmount,
+        message: `Congratulations! You won ${payoutAmount.toFixed(2)} units.`
+      });
+    } else {
+      payoutResults.push({
+        viewerId: bet.viewerId,
+        payout: 0,
+        message: 'Sorry, you lost this bet.'
+      });
+    }
+  });
+
+  io.emit('endBet', { currentBet, payoutResults });
+  res.status(200).send({ currentBet, payoutResults });
 });
+
 
 app.get('/betResult/:viewerId', async (req, res) => {
   const { viewerId } = req.params;
-  const bet = await Bet.findOne({ viewerId });
-  // Implement logic to determine if the bet was a win or loss
-  const result = { message: 'Bet result message' }; // Update with actual result message
-  res.send(result);
+  const currentBet = await CurrentBet.findOne({ active: true });
+  const bets = await Bet.find({ viewerId });
+
+  if (!bets.length) {
+    return res.status(404).send('No bets found for this viewer');
+  }
+
+  if (currentBet) {
+    // Bet is still active
+    const viewerBet = bets.find(bet => bet.option);
+    res.send({
+      active: true,
+      message: `You bet on: ${viewerBet.option} with an amount of ${viewerBet.amount}`,
+    });
+  } else {
+    // Bet has ended
+    const endedBet = await CurrentBet.findOne({ active: false });
+    if (!endedBet) {
+      return res.status(404).send('No bet results found');
+    }
+
+    const winningOption = endedBet.options.find(option => option.winning).option;
+
+    // These aggregate queries need to be within an async function
+    const totalBets = await Bet.aggregate([{ $group: { _id: null, total: { $sum: "$amount" } } }]);
+    const totalWinningBets = await Bet.aggregate([{ $match: { option: winningOption } }, { $group: { _id: null, total: { $sum: "$amount" } } }]);
+
+    const betResult = bets.map(bet => {
+      if (bet.option === winningOption) {
+        const payoutRatio = totalBets[0].total / totalWinningBets[0].total;
+        const payoutAmount = bet.amount * payoutRatio;
+        return {
+          outcome: 'won',
+          payout: payoutAmount,
+          message: `Congratulations! You won ${payoutAmount.toFixed(2)}!`,
+        };
+      } else {
+        return {
+          outcome: 'lost',
+          message: 'Sorry, you lost this bet.',
+        };
+      }
+    });
+
+    res.send({ active: false, betResult });
+  }
 });
+
 
 
 // Start server

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, FlatList, TextInput } from 'react-native';
 import axios from 'axios';
 
 const LiveBetMonitor = ({ navigation }) => {
   const [bet, setBet] = useState(null);
+  const [winningOption, setWinningOption] = useState('');
+  const [payoutResults, setPayoutResults] = useState(null);
 
   useEffect(() => {
     const fetchBet = async () => {
@@ -13,14 +15,14 @@ const LiveBetMonitor = ({ navigation }) => {
 
     fetchBet();
 
-    const interval = setInterval(fetchBet, 2000); // Fetch bet status every 5 seconds
+    const interval = setInterval(fetchBet, 2000); // Fetch bet status every 2 seconds
 
     return () => clearInterval(interval);
   }, []);
 
   const endBet = async () => {
-    await axios.post('http://localhost:3000/endBet');
-    navigation.navigate('StreamerOptions');
+    const response = await axios.post('http://localhost:3000/endBet', { winningOption });
+    setPayoutResults(response.data.payoutResults);
   };
 
   return (
@@ -40,13 +42,34 @@ const LiveBetMonitor = ({ navigation }) => {
                 </View>
               )}
             />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Winning Option"
+              value={winningOption}
+              onChangeText={setWinningOption}
+            />
             <TouchableOpacity style={styles.button} onPress={endBet}>
               <Text style={styles.buttonText}>End Bet</Text>
             </TouchableOpacity>
           </View>
         ) : (
-          <Text style={styles.title}>No active bet</Text>
+          <View style={styles.payoutContainer}>
+            <Text style={styles.title}>Winner Payouts:</Text>
+            <FlatList
+              data={payoutResults}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.payoutItem}>
+                  <Text style={styles.payoutText}>Viewer ID: {item.viewerId}</Text>
+                  <Text style={styles.payoutText}>Payout: {item.payout.toFixed(2)}</Text>
+                </View>
+              )}
+            />
+          </View>
         )}
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('StreamerOptions')}>
+          <Text style={styles.buttonText}>Back to Home</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
@@ -87,6 +110,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
   },
+  input: {
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+    marginBottom: 10,
+  },
   button: {
     backgroundColor: '#007bff',
     padding: 15,
@@ -98,6 +128,22 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 18,
+  },
+  payoutContainer: {
+    marginTop: 20,
+    width: '100%',
+  },
+  payoutItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    marginBottom: 5,
+    borderRadius: 5,
+  },
+  payoutText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 

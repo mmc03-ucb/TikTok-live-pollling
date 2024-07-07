@@ -14,7 +14,8 @@ const currentBetSchema = new mongoose.Schema({
     {
       option: String,
       bets: Number,
-      odds: Number, // Add odds field to each option
+      odds: Number,
+      winning: { type: Boolean, default: false }, // Add winning field
     }
   ],
   timer: Number,
