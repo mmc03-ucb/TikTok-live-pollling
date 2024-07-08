@@ -1,3 +1,21 @@
+## Overview
+TikPlayLive: Enhancing TikTok Live Streams
+
+Goal: Increase viewer participation and retention by introducing interactive features.
+
+Key Features:
+
+Polls: Streamers can create live polls to engage viewers.
+Mini-Games: Interactive games like Memory Match, Word Scramble, and Guess the Picture.
+Betting: Viewers place bets on outcomes, adding excitement to the stream.
+
+Technologies:
+Frontend: ReactJS for cross-platform compatibility.
+Backend: MongoDB Atlas for efficient data management.
+Version Control: Git for streamlined collaboration.
+
+Design Philosophy: Ensure features complement the live content without overshadowing the streamer.
+
 ## Installation
 
 ### Prerequisites
