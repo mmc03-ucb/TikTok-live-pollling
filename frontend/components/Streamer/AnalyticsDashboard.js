@@ -11,7 +11,7 @@ const chartConfig = {
   color: (opacity = 1) => `rgba(255, 0, 255, ${opacity})`,
   labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
   barPercentage: 0.7,
-  fillShadowGradient: '#ff1493',
+  fillShadowGradient: '#1dc0bb',
   fillShadowGradientOpacity: 1,
 };
 
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ff69b4',
+    color: '#1dc0bb',
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -167,14 +167,16 @@ const styles = StyleSheet.create({
   metricTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#ff69b4',
+    color: '#1dc0bb',
     marginBottom: 10,
   },
   button: {
-    backgroundColor: '#ff1493',
-    padding: 15,
-    borderRadius: 5,
-    width: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#1dc0bb',
+    marginVertical: 10,
     alignItems: 'center',
   },
   buttonText: {

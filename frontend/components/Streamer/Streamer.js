@@ -25,7 +25,7 @@ const Streamer = ({ navigation }) => {
     <ImageBackground source={require('/Users/mmc/Desktop/tiktok-live-quiz/frontend/assets/background.jpg')} style={styles.backgroundImage}>
       <View style={styles.container}>
         <View style={styles.content}>
-          <Text style={styles.title}>Create a new Poll</Text>
+          <Text style={styles.title}>Create a new poll</Text>
           <TextInput
             placeholder="Question"
             value={question}
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent', // semi-transparent background
   },
   content: {
-    backgroundColor: 'transparent', // darker semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // darker semi-transparent background
     borderRadius: 10,
     padding: 20,
   },
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginBottom: 20,
     textAlign: 'center',
+    fontStyle: 'bold'
   },
   input: {
     borderWidth: 1,
@@ -104,14 +105,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   button: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#1dc0bb',
+    marginVertical: 10,
+    width: '100%', // Make buttons full width inside the content box
     alignItems: 'center',
-    marginVertical: 5,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#007bff',
   },
   buttonText: {
     color: '#fff',

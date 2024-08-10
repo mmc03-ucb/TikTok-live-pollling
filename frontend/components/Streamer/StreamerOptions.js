@@ -47,11 +47,13 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   smallButton: {
-    backgroundColor: 'transparent',
-    padding: 5,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#007bff',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#1dc0bb',
+    marginVertical: 10,
+    alignItems: 'center',
   },
   smallButtonText: {
     color: 'white',
@@ -63,12 +65,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   optionButton: {
-    padding: 5,
-    borderRadius: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#1dc0bb',
     marginVertical: 10,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#007bff',
+    width: '100%', // Make buttons full width inside the content box
+    alignItems: 'center',
   },
   optionButtonText: {
     color: '#fff',

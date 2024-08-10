@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginBottom: 20,
     textAlign: 'center',
+    fontstyle: 'bold',
   },
   input: {
     backgroundColor: '#fff',
@@ -109,30 +110,28 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   button: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#1dc0bb',
     marginVertical: 10,
     width: '100%', // Make buttons full width inside the content box
     alignItems: 'center',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#007bff',
   },
   buttonText: {
     color: '#fff',
     fontSize: 18,
   },
   backButton: {
-    backgroundColor: 'transparent',
-    padding: 10,
-    borderRadius: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#1dc0bb',
     marginVertical: 10,
-    width: '100%', // Make back button full width inside the content box
+    width: '100%', // Make buttons full width inside the content box
     alignItems: 'center',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#007bff',
   },
   backButtonText: {
     color: '#fff',

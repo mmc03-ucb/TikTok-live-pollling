@@ -77,9 +77,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   button: {
-    backgroundColor: '#007bff',
-    padding: 15,
-    borderRadius: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#1dc0bb',
     marginVertical: 10,
     width: '100%', // Make buttons full width inside the content box
     alignItems: 'center',

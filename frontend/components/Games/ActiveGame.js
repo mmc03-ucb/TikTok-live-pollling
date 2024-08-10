@@ -90,15 +90,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: 'transparent',
-    padding: 15,
-    borderRadius: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#1dc0bb',
     marginVertical: 10,
-    width: '100%', // Make buttons full width inside the content box
     alignItems: 'center',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#007bff',
   },
   buttonText: {
     color: '#fff',
